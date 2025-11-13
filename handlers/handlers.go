@@ -5,17 +5,20 @@ import (
 	"net/http"
 
 	"github.com/amjadnzr/url-shortly/database"
+	"github.com/amjadnzr/url-shortly/helpers"
 	"github.com/amjadnzr/url-shortly/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Hanlder struct {
-	db *database.Database
+	db          *database.Database
+	tokenHelper *helpers.TokenHelper
 }
 
-func NewHandler(db *database.Database) *Hanlder {
+func NewHandler(db *database.Database, tokenHelper *helpers.TokenHelper) *Hanlder {
 	return &Hanlder{
-		db: db,
+		db:          db,
+		tokenHelper: tokenHelper,
 	}
 }
 

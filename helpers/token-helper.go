@@ -13,8 +13,11 @@ type TokenHelper struct {
 	publisher string
 }
 
-func NewTokenHelper(jwtSecret string) {
-
+func NewTokenHelper(jwtSecret string) *TokenHelper {
+	return &TokenHelper{
+		secret:    jwtSecret,
+		publisher: "url-shortly",
+	}
 }
 
 type Claims struct {

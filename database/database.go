@@ -12,8 +12,8 @@ type Database struct {
 	*sql.DB
 }
 
-func InitDatabase() (*Database, error) {
-	db, err := sql.Open("sqllite3", "url-shortly.db")
+func InitDatabase(connectionString string) (*Database, error) {
+	db, err := sql.Open("sqllite3", connectionString)
 	if err != nil {
 		return nil, err
 	}
