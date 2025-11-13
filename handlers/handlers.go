@@ -50,7 +50,6 @@ func (h *Hanlder) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(user)
 	return
-
 }
 
 func (h *Hanlder) LoginUser(w http.ResponseWriter, r *http.Request) {
