@@ -37,11 +37,17 @@ func main() {
 	RegisterMux(mux, handler)
 
 	if err := http.ListenAndServe(port, mux); err != nil {
-		log.Fatal("Server failed to run")
+		log.Fatal("Server failed to run", err)
 	}
 }
 
 func RegisterMux(m *http.ServeMux, h *handlers.Hanlder) {
-	m.HandleFunc("/auth/register", h.RegisterUser)
-	m.HandleFunc("/auth/login", h.LoginUser)
+	// Page
+	m.HandleFunc("/", h.LoginPage)
+	m.HandleFunc("/register", h.RegisterPage)
+	m.HandleFunc("/login", h.LoginPage)
+
+	// Api
+	m.HandleFunc("/api/auth/register", h.RegisterUser)
+	m.HandleFunc("/api/auth/login", h.LoginUser)
 }

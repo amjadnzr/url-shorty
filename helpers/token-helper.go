@@ -38,7 +38,7 @@ func (t *TokenHelper) GenerateJWTToken(userId int64) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS384, claims)
-	tokenString, err := token.SignedString(t.secret)
+	tokenString, err := token.SignedString([]byte(t.secret))
 	if err != nil {
 		return "", err
 	}
@@ -49,7 +49,7 @@ func (t *TokenHelper) GenerateJWTToken(userId int64) (string, error) {
 func (t *TokenHelper) ValidateJWTToken(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); ok {
-			return t.secret, nil
+			return []byte(t.secret), nil
 		}
 		return nil, errors.New("token signing invalid")
 	})

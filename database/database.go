@@ -13,7 +13,8 @@ type Database struct {
 }
 
 func InitDatabase(connectionString string) (*Database, error) {
-	db, err := sql.Open("sqllite3", connectionString)
+	db, err := sql.Open("sqlite3", connectionString)
+
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +26,7 @@ func InitDatabase(connectionString string) (*Database, error) {
 
 func (db *Database) CreateNewUser(c context.Context, user *models.User) (int64, error) {
 	row, err := db.ExecContext(c,
-		"INSERT INTO Users (name, email, password) VALUES (?, ?, ?)",
+		"INSERT INTO Users (name, email, passwordHash) VALUES (?, ?, ?)",
 		user.Name, user.Email, user.PasswordHash,
 	)
 	if err != nil {
@@ -45,6 +46,16 @@ func (db *Database) GetUserById(c context.Context, id int64) (*models.User, erro
 	if err :=
 		db.QueryRow("SELECT * FROM Users where id = ?", id).
 			Scan(user); err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (db *Database) GetUserByEmail(c context.Context, email string) (*models.User, error) {
+	user := new(models.User)
+	if err :=
+		db.QueryRow("SELECT * FROM Users WHERE email = ? LIMIT 1", email).
+			Scan(&user.Id, &user.Name, &user.Email, &user.PasswordHash); err != nil {
 		return nil, err
 	}
 	return user, nil

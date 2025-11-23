@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortly · Create Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+    <style>
+        :root {
+            color-scheme: light dark;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 64, 175, 0.95));
+            color: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1.5rem, 2vw, 3rem);
+        }
+
+        main {
+            width: min(420px, 100%);
+            padding: clamp(2rem, 3vw, 2.75rem);
+            backdrop-filter: blur(18px);
+            background: rgba(15, 23, 42, 0.75);
+            border-radius: 18px;
+            box-shadow:
+                0 25px 50px -12px rgba(30, 64, 175, 0.45),
+                0 10px 25px rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        h1 {
+            margin: 0 0 0.75rem 0;
+            font-size: clamp(1.7rem, 3vw, 2rem);
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        p.lead {
+            margin: 0 0 2rem 0;
+            color: #cbd5f5;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        form {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: rgba(15, 23, 42, 0.35);
+            color: inherit;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(96, 165, 250, 0.8);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            transform: translateY(-1px);
+        }
+
+        button.btn {
+            text-align: center;
+            padding: 0.95rem 1rem;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button.btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
+        }
+
+        button.btn:active {
+            transform: translateY(0);
+        }
+
+        .switch-auth {
+            margin-top: 1.75rem;
+            text-align: center;
+            font-size: 0.92rem;
+            color: #94a3b8;
+        }
+
+        .switch-auth a {
+            color: #60a5fa;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .switch-auth a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+        }
+
+        .message.error {
+            background: rgba(248, 113, 113, 0.1);
+            border-color: rgba(248, 113, 113, 0.25);
+            color: #fecaca;
+        }
+
+        .message.success {
+            background: rgba(52, 211, 153, 0.12);
+            border-color: rgba(52, 211, 153, 0.3);
+            color: #bbf7d0;
+        }
+    </style>
+</head>
+<body hx-ext="json-enc">
+    <main>
+        <h1>Create your account</h1>
+        <p class="lead">
+            Join URL Shortly to craft memorable short links, automate redirects, and track click analytics in real time.
+        </p>
+
+        {{ if .Message }}
+        <div class="message {{ .MessageClass }}">{{ .Message }}</div>
+        {{ end }}
+
+        <form
+            hx-post="/api/auth/register"
+            hx-target="body"
+            hx-swap="outerHTML"
+            method="post"
+            hx-ext="json-enc"
+        >
+            <div>
+                <label for="name">Full name</label>
+                <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+            </div>
+            <div>
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
+            </div>
+            <button type="submit" class="btn">Create account</button>
+        </form>
+
+        <div class="switch-auth">
+            Already have an account?
+            <a href="/auth/login">Sign in instead</a>
+        </div>
+    </main>
+    <script>
+        
+    </script>
+</body>
+</html>
